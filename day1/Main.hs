@@ -1,15 +1,22 @@
 import System.IO  
 import Control.Monad
 
-
 main :: IO ()
 main = do
     contents <- readFile "1.txt"
-    let conv = sum . map readNum . words $ contents
-    print conv
+    let firstPart = sum . map readNum . words $ contents
+    let secondPart = sum . map (\x -> (sum $ init $ vodo [x]) + x) . map readNum . words $ contents
+    print secondPart
 
-readNum :: String -> Int
-readNum = count . fromIntegral . read
+vodo :: [Double] -> [Double]
+vodo (x:xs)
+    | count x <= 0 = (x : xs)
+    | otherwise = vodo (count x : x : xs)
 
-count :: (RealFrac a, Integral b) => a -> b
-count = (subtract 2) . floor . (/ 3)
+
+readNum :: String -> Double
+readNum = count . read
+
+
+count :: Double -> Double
+count = fromIntegral . (subtract 2) . floor . (/ 3)
